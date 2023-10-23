@@ -61,32 +61,19 @@ export default function FileForm() {
     tags
   } = state
 
+
+
   
 
   const handleSubmit = async () => {
     const { file, ...rest} = state
-    const form = new FormData() 
-    form.append('metadata', rest )
-    form.append('file', file)
-
-    let object = {
-      metadata: undefined, 
-      file: undefined
-    };
-    object["metadata"] = rest
-    const fileBuffer: any = Buffer.from(await file.arrayBuffer())
-    
-    object["file"] = fileBuffer
-
-    const body = JSON.stringify(object)
-
-    console.log(body)
-
-    
 
     const response = await fetch("/api/post", {
       method: "POST",
-      body: body
+      body: JSON.stringify({
+        metadata: rest, 
+        file: Buffer.from(await file.arrayBuffer())
+      })
     })
     const data = await response.json()
     console.log(data)

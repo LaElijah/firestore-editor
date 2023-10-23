@@ -1,18 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Post } from "@/app/_utils/models/models"
-import fs, { ReadStream } from "fs"
 import { FireStoreClient } from "firestore-client"
-import { Readable, Stream } from "stream";
 
 
 
 export async function POST(req: NextRequest, res: NextResponse) { 
     const client = new FireStoreClient({
-        bucket: 'blog-container',
+        bucket: process.env.AWS_BUCKET || "",
         options: {
-            region: "us-east-1",
-            accessKeyId: 'AKIA4YPJCHN4I42ZLHT4',
-            secretAccessKey: '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'
+            region: process.env.AWS_REGION || "",
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || ""
         } 
     })
     
@@ -23,6 +21,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
    
    
     const response = await client.store('wowser', form.file)
+
+
     // const file = form.get('file')
     // const metadata = form.get('metadata')
 
